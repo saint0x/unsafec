@@ -1,5 +1,17 @@
 mod scheduler;
 mod worker;
+
 fn start() -> i32 {
-    let ha = spawn(worker.run_lane_a) let hb = spawn(worker.run_lane_b) let hc = spawn(worker.run_lane_c) let a = join(ha) let b = join(hb) let c = join(hc) let sched = scheduler.tick() let async_probe = worker.run_async_once(41) return a^ b^ c^ sched^ async_probe
+    let ha = spawn(worker.run_lane_a);
+    let hb = spawn(worker.run_lane_b);
+    let hc = spawn(worker.run_lane_c);
+
+    let a = join(ha);
+    let b = join(hb);
+    let c = join(hc);
+
+    let sched = scheduler.tick();
+    let async_probe = worker.run_async_once(41);
+
+    return a ^ b ^ c ^ sched ^ async_probe;
 }

@@ -4,20 +4,44 @@ use core.http;
 use core.proc;
 use core.mem;
 use core.thread;
+
 mod api;
 mod model;
 mod services;
 mod runtime;
 mod cli;
 mod tests;
+
 fn feature_surface(seed: i32) -> i32 {
-    let lanes = [seed, seed + 1, seed + 2, seed + 3] let pick = 2 let lift = | x: i32 | x + lanes [pick] return lift(11)
+    let lanes = [seed, seed + 1, seed + 2, seed + 3];
+    let pick = 2;
+    let lift = |x: i32| x + lanes[pick];
+    return lift(11);
 }
+
 fn main() -> i32 {
-    requires true let seed = time.now() let surface = feature_surface(seed) model.preflight() cli.boot() services.boot_all() let suite = services.kernels.benchmark_suite(seed) let threaded = runtime.start() let export_probe = api.touch() let combined = suite^ threaded^ export_probe^ surface if combined > 0 {
-        checkpoint()
+    requires true
+
+    let seed = time.now();
+    let surface = feature_surface(seed);
+
+    model.preflight();
+    cli.boot();
+    services.boot_all();
+
+    let suite = services.kernels.benchmark_suite(seed);
+    let threaded = runtime.start();
+    let export_probe = api.touch();
+    let combined = suite ^ threaded ^ export_probe ^ surface;
+
+    if combined > 0 {
+        checkpoint();
     } else {
-        yield()
+        yield();
     }
-    pulse() ensures true return 0
+
+    pulse();
+
+    ensures true
+    return 0;
 }

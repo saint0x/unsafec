@@ -1,4 +1,5 @@
 rpc Ping(req: i32) -> i32;
+
 fn touch() -> i32 {
     return 0;
 }

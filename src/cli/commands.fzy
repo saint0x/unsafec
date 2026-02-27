@@ -1,3 +1,4 @@
 fn boot() -> i32 {
-    let quick = services.kernels.dual_digest(5, 4096) return quick
+    let quick = services.kernels.dual_digest(5, 4096);
+    return quick;
 }
