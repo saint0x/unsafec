@@ -1,6 +1,6 @@
-# FozzyLang Unsafe Hash Lab
+# fzy (fozzylang) Unsafe Hash Lab
 
-Competition-style Fzy + C micro-kernel exhibition focused on deterministic benchmarking.
+Competition-style fzy + C micro-kernel exhibition focused on deterministic benchmarking.
 
 ## Build C kernels
 
@@ -8,7 +8,7 @@ Competition-style Fzy + C micro-kernel exhibition focused on deterministic bench
 ./scripts/build_c_kernels.sh
 ```
 
-## Fzy checks
+## fzy checks
 
 ```bash
 fz check . --json
@@ -17,7 +17,7 @@ fz run . --det --strict-verify --record artifacts/fz.run.trace.fozzy --json
 fz headers . --out include/hashlab.h --json
 ```
 
-## Fozzy deterministic-first flow
+## fozzy deterministic-first flow
 
 ```bash
 fozzy doctor --deep --scenario tests/hashbench.pass.fozzy.json --runs 5 --seed 42 --json
