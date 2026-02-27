@@ -1,0 +1,158 @@
+{
+  "abiRevision": 1,
+  "compilerIdentityHash": "2f94649a8a371971b258cab36540b6e23fb8dcfa574a9ad138f357b1aaa1c1d7",
+  "contractSchema": "fozzylang.ffi_contracts.v1",
+  "dataLayoutHash": "4ef19cf377b4271c24656e2451536d23b76c8d7e35289fdb42706f8eff5d7afa",
+  "exports": [
+    {
+      "async": false,
+      "contract": {
+        "asyncBoundary": null,
+        "callbackBindings": [],
+        "execution": "sync"
+      },
+      "name": "fz_bench_dual",
+      "params": [
+        {
+          "c": "int32_t",
+          "contract": {
+            "lifetimeAnchor": null,
+            "mutability": "const",
+            "nullability": "n/a",
+            "ownership": "value",
+            "view": null
+          },
+          "fzy": "i32",
+          "name": "seed"
+        },
+        {
+          "c": "int32_t",
+          "contract": {
+            "lifetimeAnchor": null,
+            "mutability": "const",
+            "nullability": "n/a",
+            "ownership": "value",
+            "view": null
+          },
+          "fzy": "i32",
+          "name": "rounds"
+        }
+      ],
+      "return": {
+        "c": "int32_t",
+        "contract": {
+          "mutability": "const",
+          "nullability": "n/a",
+          "ownership": "value"
+        },
+        "fzy": "i32"
+      },
+      "symbolVersion": 1
+    },
+    {
+      "async": false,
+      "contract": {
+        "asyncBoundary": null,
+        "callbackBindings": [],
+        "execution": "sync"
+      },
+      "name": "fz_bench_suite",
+      "params": [
+        {
+          "c": "int32_t",
+          "contract": {
+            "lifetimeAnchor": null,
+            "mutability": "const",
+            "nullability": "n/a",
+            "ownership": "value",
+            "view": null
+          },
+          "fzy": "i32",
+          "name": "seed"
+        }
+      ],
+      "return": {
+        "c": "int32_t",
+        "contract": {
+          "mutability": "const",
+          "nullability": "n/a",
+          "ownership": "value"
+        },
+        "fzy": "i32"
+      },
+      "symbolVersion": 1
+    },
+    {
+      "async": true,
+      "contract": {
+        "asyncBoundary": {
+          "awaitSymbol": "fz_bench_async_async_await",
+          "dropSymbol": "fz_bench_async_async_drop",
+          "model": "async-handle-v1",
+          "pollSymbol": "fz_bench_async_async_poll",
+          "resultType": "int32_t",
+          "startSymbol": "fz_bench_async_async_start"
+        },
+        "callbackBindings": [],
+        "execution": "async-handle-v1"
+      },
+      "name": "fz_bench_async",
+      "params": [
+        {
+          "c": "int32_t",
+          "contract": {
+            "lifetimeAnchor": null,
+            "mutability": "const",
+            "nullability": "n/a",
+            "ownership": "value",
+            "view": null
+          },
+          "fzy": "i32",
+          "name": "seed"
+        }
+      ],
+      "return": {
+        "c": "int32_t",
+        "contract": {
+          "mutability": "const",
+          "nullability": "n/a",
+          "ownership": "value"
+        },
+        "fzy": "i32"
+      },
+      "symbolVersion": 1
+    }
+  ],
+  "layoutPolicy": {
+    "nonReprCUnstable": true,
+    "reprCStableOnly": true
+  },
+  "package": {
+    "name": "fozzylang_unsafe_lab",
+    "version": "0.1.0"
+  },
+  "panicBoundary": "error",
+  "reprCLayouts": [
+    {
+      "align": 4,
+      "kind": "struct",
+      "name": "HashLane",
+      "size": 16
+    },
+    {
+      "align": 4,
+      "kind": "struct",
+      "name": "BenchConfig",
+      "size": 12
+    },
+    {
+      "align": 4,
+      "kind": "enum",
+      "name": "BenchMode",
+      "size": 4
+    }
+  ],
+  "schemaVersion": "fozzylang.ffi_abi.v1",
+  "symbolVersioning": "strict-name-signature-v1",
+  "targetTriple": "aarch64-apple-darwin"
+}

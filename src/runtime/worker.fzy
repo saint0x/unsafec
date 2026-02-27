@@ -1,0 +1,25 @@
+use core.thread;
+fn run_lane_a() -> i32 {
+    checkpoint();
+    yield();
+    return services.kernels.c_stream_kernel(11, 140000);
+}
+fn run_lane_b() -> i32 {
+    checkpoint();
+    yield();
+    return services.kernels.fzy_stream_kernel(23, 140000);
+}
+fn run_lane_c() -> i32 {
+    checkpoint();
+    return services.kernels.dual_digest(31, 70000);
+}
+async fn run_async(seed: i32) -> i32 {
+    checkpoint();
+    return services.kernels.dual_digest(seed, 90000);
+}
+fn run_async_once(seed: i32) -> i32 {
+    let h = spawn(run_lane_c);
+    let lane = join(h);
+    discard run_async;
+    return lane^ seed;
+}

@@ -1,0 +1,13 @@
+#[ffi_panic(error)] pubext c fn fz_bench_dual(seed: i32, rounds: i32) -> i32 {
+    return services.kernels.dual_digest(seed, rounds);
+}
+#[ffi_panic(error)] pubext c fn fz_bench_suite(seed: i32) -> i32 {
+    return services.kernels.benchmark_suite(seed);
+}
+#[ffi_panic(error)] pubext async c fn fz_bench_async(seed: i32) -> i32 {
+    checkpoint();
+    return services.kernels.benchmark_suite(seed);
+}
+fn touch() -> i32 {
+    return services.kernels.prime();
+}

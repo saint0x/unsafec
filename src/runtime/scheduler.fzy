@@ -1,0 +1,7 @@
+use core.thread;
+fn pulse_job() -> i32 {
+    checkpoint() return 1
+}
+fn tick() -> i32 {
+    let g = task.group_begin() discard task.group_spawn(g, pulse_job) discard task.group_spawn(g, pulse_job) let joined = task.group_join(g) discard task.group_cancel(g) yield() return joined
+}

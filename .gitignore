@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Fozzy/Fzy generated state
+.fz/
+.fozzy/
+artifacts/
+tmp/
+*.trace.fozzy
+
+# Native build outputs
+cbuild/
+
+# Optional local vendor cache/state
+vendor/
+
+# Editor/IDE
+.vscode/
+.idea/

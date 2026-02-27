@@ -1,0 +1,11 @@
+fn validate_rounds(rounds: i32) -> i32 {
+    requires rounds > 0 if rounds < 256 then return 256 if rounds > 1200000 then return 1200000 return rounds
+}
+fn benchmark_config(seed: i32) -> BenchConfig {
+    let rounds = validate_rounds((seed & 16383) + 200000) let workers = 3 return BenchConfig {
+        seed: seed, rounds: rounds, workers: workers
+    }
+}
+fn preflight() -> i32 {
+    requires true let v = types.schema_version() let cfg = benchmark_config(1337) if cfg.workers < 1 then return - 1 ensures v >= 2 return v
+}

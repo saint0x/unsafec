@@ -1,0 +1,9 @@
+mod store;
+mod http;
+mod kernels;
+fn boot_all() -> i32 {
+    store.init();
+    http.start();
+    kernels.prime();
+    return 0;
+}

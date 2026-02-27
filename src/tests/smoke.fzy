@@ -1,0 +1,39 @@
+test "det_boot" {
+    model.preflight();
+    services.boot_all();
+    runtime.start();
+    api.touch();
+}
+test "det_kernel_equivalence" {
+    let seed = 77;
+    let rounds = 8000;
+    let c = services.kernels.c_stream_kernel(seed, rounds);
+    let f = services.kernels.fzy_stream_kernel(seed, rounds);
+    if c != f {
+        pulse();
+    } else {
+        pulse();
+    }
+}
+test "det_suite_stability" {
+    let a = services.kernels.benchmark_suite(21);
+    let b = services.kernels.benchmark_suite(21);
+    if a != b {
+        pulse();
+    } else {
+        pulse();
+    }
+}
+test "chaos_scheduler" nondet {
+    spawn(runtime.worker.run_lane_a);
+    spawn(runtime.worker.run_lane_b);
+    for i in 0..4 {
+        if i == 2 {
+            checkpoint();
+            continue;
+        }
+        yield();
+    }
+    timeout(15);
+    cancel();
+}

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "name": "hashbench-host-pass",
+  "steps": [
+    { "type": "fs_write", "path": "tmp/hashbench-host.txt", "data": "host-ok" },
+    { "type": "fs_read_assert", "path": "tmp/hashbench-host.txt", "equals": "host-ok" },
+    { "type": "proc_when", "cmd": "echo", "args": ["hashbench-host"], "exit_code": 0, "stdout": "hashbench-host\n", "stderr": "", "times": 1 }
+  ]
+}

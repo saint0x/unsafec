@@ -1,0 +1,5 @@
+mod ffi;
+mod rpc;
+fn touch() -> i32 {
+    let a = ffi.touch() let b = rpc.touch() return a^ b
+}

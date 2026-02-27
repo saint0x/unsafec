@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "name": "hashbench-pass",
+  "steps": [
+    { "type": "trace_event", "name": "hashbench-start" },
+    { "type": "memory_alloc", "bytes": 256, "key": "buf", "tag": "bench" },
+    { "type": "memory_assert_in_use_bytes", "equals": 256 },
+    { "type": "assert_eq_int", "a": 7, "b": 7 },
+    { "type": "memory_free", "key": "buf" },
+    { "type": "memory_assert_in_use_bytes", "equals": 0 },
+    { "type": "trace_event", "name": "hashbench-end" }
+  ]
+}
