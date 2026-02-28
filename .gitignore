@@ -17,3 +17,8 @@ vendor/
 # Editor/IDE
 .vscode/
 .idea/
+
+# Python cache
+scripts/__pycache__/
+include/fozzylang_unsafe_lab.h
+include/fozzylang_unsafe_lab.abi.json

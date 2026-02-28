@@ -10,9 +10,19 @@ DYLIB="$OUT_DIR/libhashkernels.dylib"
 
 mkdir -p "$OUT_DIR"
 
-cc -O3 -march=native -std=c11 -fPIC -c "$SRC" -o "$OBJ"
+COMMON_FLAGS=(
+  -O3
+  -ffast-math
+  -funroll-loops
+  -fstrict-aliasing
+  -flto
+  -mcpu=native
+  -DNDEBUG
+)
+
+cc "${COMMON_FLAGS[@]}" -std=c11 -fPIC -c "$SRC" -o "$OBJ"
 ar rcs "$LIB" "$OBJ"
-cc -dynamiclib -O3 -march=native "$SRC" -o "$DYLIB"
+cc -dynamiclib "${COMMON_FLAGS[@]}" "$SRC" -o "$DYLIB"
 
 echo "built: $LIB"
 echo "built: $DYLIB"

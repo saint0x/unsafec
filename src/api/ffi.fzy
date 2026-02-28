@@ -9,6 +9,11 @@ pubext c fn fz_bench_suite(seed: i32) -> i32 {
 }
 
 #[ffi_panic(error)]
+pubext c fn fz_hash_buf(ptr_borrowed: *u8, len: usize, seed: i32) -> i32 {
+    return services.kernels.c_hash_buf_kernel(ptr_borrowed, len, seed);
+}
+
+#[ffi_panic(error)]
 pubext async c fn fz_bench_async(seed: i32) -> i32 {
     checkpoint();
     return services.kernels.benchmark_suite(seed);

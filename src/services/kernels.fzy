@@ -4,6 +4,7 @@ use core.thread;
 ext unsafe c fn hk_mix32(input: i32, seed: i32) -> i32;
 ext unsafe c fn hk_mix4(a: i32, b: i32, c: i32, d: i32, seed: i32) -> i32;
 ext unsafe c fn hk_stream(seed: i32, rounds: i32) -> i32;
+ext unsafe c fn hk_hash_buf(ptr_borrowed: *u8, len: usize, seed: i32) -> i32;
 
 fn fzy_mix32(input: i32, seed: i32) -> i32 {
     let mut x = input ^ seed;
@@ -36,6 +37,12 @@ pub fn c_mix4_kernel(a: i32, b: i32, c: i32, d: i32, seed: i32) -> i32 {
 pub fn c_stream_kernel(seed: i32, rounds: i32) -> i32 {
     unsafe {
         return hk_stream(seed, rounds);
+    }
+}
+
+pub fn c_hash_buf_kernel(ptr_borrowed: *u8, len: usize, seed: i32) -> i32 {
+    unsafe {
+        return hk_hash_buf(ptr_borrowed, len, seed);
     }
 }
 

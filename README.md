@@ -1,35 +1,86 @@
-# fzy (fozzylang) Unsafe Hash Lab
+# fzy (fozzylang) <-> C Unsafe Performance Lab
 
-Competition-style fzy + C micro-kernel exhibition focused on deterministic benchmarking.
+This project is an unsafe `fzy` + `C` interop benchmark lab focused on raw hashing throughput.
 
-## Build C kernels
+## Benchmark Highlights (1 MiB)
 
-```bash
-./scripts/build_c_kernels.sh
-```
+From the latest full run (`artifacts/bench_sota_vs_fzy.json`):
 
-## fzy checks
+| implementation | single (GB/s) | parallel (GB/s) |
+|---|---:|---:|
+| ours_c | 25.170 | 24.282 |
+| ours_fzy | 25.067 | 23.747 |
+| openssl_sha256 | 2.456 | 2.298 |
+| blake3 | 1.819 | 1.692 |
+| xxh3_64 | 36.364 | 32.921 |
 
-```bash
-fz check . --json
-fz test . --det --strict-verify --record artifacts/fz.test.trace.fozzy --json
-fz run . --det --strict-verify --record artifacts/fz.run.trace.fozzy --json
-fz headers . --out include/hashlab.h --json
-```
+Industry baseline deltas:
 
-## fozzy deterministic-first flow
+- `ours_c` is `10.25x` faster than `openssl_sha256` (single, 1 MiB)
+- `ours_c` is `13.84x` faster than `blake3` (single, 1 MiB)
+- `ours_fzy` is `10.21x` faster than `openssl_sha256` (single, 1 MiB)
+- `ours_fzy` is `13.78x` faster than `blake3` (single, 1 MiB)
 
-```bash
-fozzy doctor --deep --scenario tests/hashbench.pass.fozzy.json --runs 5 --seed 42 --json
-fozzy test --det --strict tests/hashbench.pass.fozzy.json --json
-fozzy run tests/hashbench.pass.fozzy.json --det --record artifacts/hashbench.trace.fozzy --json
-fozzy trace verify artifacts/hashbench.trace.fozzy --strict --json
-fozzy replay artifacts/hashbench.trace.fozzy --json
-fozzy ci artifacts/hashbench.trace.fozzy --json
-```
+Full benchmark tables: [BENCH.md](./BENCH.md)
 
-## Host-backed confidence
+## Run Benchmarks
+
+Quick:
 
 ```bash
-fozzy run tests/hashbench.host.pass.fozzy.json --proc-backend host --fs-backend host --http-backend host --json
+./scripts/bench_sota.sh --quick
 ```
+
+Full:
+
+```bash
+./scripts/bench_sota.sh
+```
+
+Artifacts:
+
+- `artifacts/bench_sota_vs_fzy.json`
+- `artifacts/bench_sota_vs_fzy.md`
+
+## fzy <-> C Interop Snippets
+
+C ABI surface (`csrc/hashkernels.h`):
+
+```c
+int32_t hk_hash_buf(const uint8_t* ptr_borrowed, size_t len, int32_t seed);
+```
+
+fzy import of C function (`src/services/kernels.fzy`):
+
+```fzy
+ext unsafe c fn hk_hash_buf(ptr_borrowed: *u8, len: usize, seed: i32) -> i32;
+
+pub fn c_hash_buf_kernel(ptr_borrowed: *u8, len: usize, seed: i32) -> i32 {
+    unsafe {
+        return hk_hash_buf(ptr_borrowed, len, seed);
+    }
+}
+```
+
+fzy export back to C ABI (`src/api/ffi.fzy`):
+
+```fzy
+#[ffi_panic(error)]
+pubext c fn fz_hash_buf(ptr_borrowed: *u8, len: usize, seed: i32) -> i32 {
+    return services.kernels.c_hash_buf_kernel(ptr_borrowed, len, seed);
+}
+```
+
+Harness call path (`scripts/bench_sota_vs_fzy.py`):
+
+```python
+self._fzy.fz_hash_buf.argtypes = [ctypes.POINTER(ctypes.c_uint8), ctypes.c_size_t, ctypes.c_int32]
+self._fzy.fz_hash_buf.restype = ctypes.c_int32
+```
+
+## Optimization TLDR
+
+- Hot path is implemented in C with arm64 hardware CRC intrinsics and multi-lane accumulation.
+- `fzy` is used as the interop/control surface and export boundary, keeping unsafe isolated at explicit ABI points.
+- Benchmark harness pre-allocates buffers per run and avoids per-iteration marshalling to reduce measurement noise.
+- C build uses aggressive native flags (`-O3 -flto -mcpu=native -funroll-loops`) for peak kernel throughput.
