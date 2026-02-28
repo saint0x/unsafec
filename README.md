@@ -1,4 +1,4 @@
-# fzy (fozzylang) <-> C Unsafe Performance Lab
+# unsafe fzy <-> C Performance Lab
 
 This project is an unsafe `fzy` + `C` interop benchmark lab focused on raw hashing throughput.
 
